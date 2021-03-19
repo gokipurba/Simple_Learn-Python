@@ -1,0 +1,118 @@
+board = ["-", "-", "-",
+         "-", "-", "-",
+         "-", "-", "-"]
+
+game_running = True
+current_play = "X"
+winner = ""
+
+def play_game():
+    
+    display_board()
+
+    while game_running:        
+        handle_trun(current_play)
+        masih_lanjut()
+        flip()
+    global winner
+    if winner == "X" or winner =="O" : 
+        print(f'winner is {winner}') 
+    else :
+        winner = "tie"
+        print(f'{winner}') 
+
+def display_board():
+    print(board[0]+ "|" + board[1]+ "|" + board[2])
+    print(board[3]+ "|" + board[4]+ "|" + board[5])
+    print(board[6]+ "|" + board[7]+ "|"+ board[8])
+
+def handle_trun(current_play):
+    valid = False
+    while not valid :
+        print(f"it's {current_play} turn")
+        position = int(input("Masukkan Angka 1-9 = "))
+        
+        while position not in range(10):
+            position = int(input("Masukkan Angka 1-9 = "))
+
+        position -= 1 
+
+        if board[position] == "-":
+            board[position] = current_play
+            valid = True
+        else :
+            print("you can't go there! ")
+            valid = False
+                 
+    display_board()
+
+def masih_lanjut():
+    tie()
+    chek_win()
+
+def chek_win(): 
+    row_check()
+    coloumn_check()
+    diagonal_check()
+    
+    return winner
+  
+def row_check():
+    global winner, game_running
+    row_1 = board[0] == board[1] == board[2] != "-"
+    row_2 = board[3] == board[4] == board[5] != "-"
+    row_3 = board[6] == board[7] == board[8] != "-"
+    
+    if row_1 or row_2 or row_3 :
+        game_running = False
+
+    if row_1 :
+        winner = board[0]
+    elif row_2 :
+        winner = board[3]
+    elif row_3 :
+        winner = board[6]
+    return winner
+def coloumn_check():
+    global winner, game_running
+    coloumn_1 = board[0] == board[3] == board[6] != "-"
+    coloumn_2 = board[1] == board[4] == board[7] != "-"
+    coloumn_3 = board[2] == board[5] == board[8] != "-"
+    
+    if coloumn_1 or coloumn_2 or coloumn_3 :
+        game_running = False
+
+    if coloumn_1 :
+        winner = board[0]
+    elif coloumn_2 :
+        winner = board[1]
+    elif coloumn_3 :
+        winner = board[2]
+    return winner
+
+def diagonal_check():
+    global winner, game_running
+    diagonal_1 = board[0] == board[4] == board[8] != "-"
+    diagonal_2 = board[2] == board[4] == board[6] != "-"
+
+    if diagonal_1 or diagonal_2 :
+        game_running = False
+
+    if diagonal_1 :
+        winner = board[0]
+    elif diagonal_2 :
+        winner = board[2]
+    return winner
+def tie():
+    global winner, game_running
+    if "-" not in board : 
+        winner = "tie"
+        game_running = False
+
+def flip (): 
+    global current_play
+    if current_play == "X":
+        current_play = "O"
+    else:
+        current_play = "X"
+play_game() 
